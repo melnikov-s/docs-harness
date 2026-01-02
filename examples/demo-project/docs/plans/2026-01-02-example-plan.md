@@ -4,6 +4,11 @@
 **Started**: 2026-01-02  
 **Goal**: Demonstrate plan file format
 
+## Related Docs
+
+<!-- Link to relevant architecture/feature docs for context -->
+<!-- Example: - [Auth Feature](../features/auth.md) -->
+
 ## Context
 
 This is an example plan showing how agents should document work in progress.

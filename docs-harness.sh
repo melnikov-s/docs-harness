@@ -402,6 +402,11 @@ add_plan() {
 **Started**: ${TODAY}  
 **Goal**: ${description}
 
+## Related Docs
+
+<!-- Link to relevant architecture/feature docs for context -->
+<!-- Example: - [Auth Feature](../features/auth.md) -->
+
 ## Context
 
 [Why this work is needed]
