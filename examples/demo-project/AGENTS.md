@@ -50,13 +50,16 @@ The `docs-harness` command is an **external CLI tool** that must be installed on
 - Log decisions with rationale (future agents need to know WHY)
 - Track files changed
 
-#### Session End
+#### Before Ending Your Session (REQUIRED)
 
-Update the plan with:
+You MUST update the plan file before finishing:
 
-- Current status
-- Clear "Next Steps" for the next agent
-- Any blockers or open questions
+1. **Progress Log**: Add a dated entry describing what you accomplished
+2. **Files Changed**: List any files you created or modified
+3. **Next Steps**: Mark completed items with [x], add new items if needed
+4. **Open Questions**: Note anything unresolved
+
+The plan file is the source of truth. Do not consider your work complete until it reflects what you did.
 
 #### Work Complete
 
