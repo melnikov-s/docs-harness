@@ -47,6 +47,17 @@ docs-harness --check              # Validate structure + markers
 docs-harness --print-agents       # Print canonical AGENTS block
 ```
 
+## Seeding an Existing Repo
+
+After running `docs-harness`, prompt your agent:
+
+```
+Read AGENTS.md, analyze this codebase, and document the architecture
+and key features using docs-harness commands.
+```
+
+The agent will use `add-arch` and `add-feature` to create and populate documentation based on the codebase.
+
 ## How It Works
 
 ### Sync Behavior
