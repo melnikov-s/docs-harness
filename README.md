@@ -58,6 +58,16 @@ and key features using docs-harness commands.
 
 The agent will use `add-arch` and `add-feature` to create and populate documentation based on the codebase.
 
+## Continuing Work on a Plan
+
+To have an agent continue an in-progress plan:
+
+```
+Read AGENTS.md and continue the current in-progress plan.
+```
+
+The agent will find the plan, read the Next Steps, and continue where the last session left off.
+
 ## How It Works
 
 ### Sync Behavior
