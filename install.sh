@@ -23,20 +23,31 @@ REPO_RAW="https://raw.githubusercontent.com/melnikov-s/docs-harness/main"
 INSTALL_DIR="${HOME}/.local/share/docs-harness"
 BIN_DIR="${HOME}/.local/bin"
 
+# Detect if updating or fresh install
+if [[ -f "$INSTALL_DIR/docs-harness.sh" ]]; then
+    UPDATING=true
+else
+    UPDATING=false
+fi
+
 echo "Installing docs-harness..."
 
 # Create directories
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$BIN_DIR"
 
-# Download the main script
+# Download the main script (overwrites existing)
 curl -fsSL "${REPO_RAW}/docs-harness.sh" -o "$INSTALL_DIR/docs-harness.sh"
 chmod +x "$INSTALL_DIR/docs-harness.sh"
 
-# Create symlink in bin
+# Create symlink in bin (force overwrites existing)
 ln -sf "$INSTALL_DIR/docs-harness.sh" "$BIN_DIR/docs-harness"
 
-echo -e "${GREEN}✓${NC} Installed docs-harness"
+if $UPDATING; then
+    echo -e "${GREEN}✓${NC} Updated docs-harness to latest version"
+else
+    echo -e "${GREEN}✓${NC} Installed docs-harness"
+fi
 
 # Check if ~/.local/bin is in PATH
 if echo "$PATH" | grep -q "$BIN_DIR"; then
