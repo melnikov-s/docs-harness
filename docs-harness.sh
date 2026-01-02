@@ -59,6 +59,16 @@ AGENTS_HARNESS_CONTENT='## Documentation
 
 ---
 
+### Prerequisites
+
+The `docs-harness` command is an **external CLI tool** that must be installed on the system.
+
+- **Check if installed**: Run `which docs-harness` or `docs-harness --version`
+- **If not installed**: See https://github.com/melnikov-s/docs-harness for installation
+- **Do NOT create your own implementation** — use the installed CLI
+
+---
+
 ### Cold Start Protocol (New Session)
 
 1. **Read `docs/plans/_index.md`** — Check for in-progress work
