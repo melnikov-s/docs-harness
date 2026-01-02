@@ -67,6 +67,20 @@ Update the plan with:
 
 ---
 
+### When to Use Plans
+
+Plans are for **substantial work that may span multiple sessions**:
+
+- New features, major refactors, multi-step implementations
+
+**Do not create plans for**:
+
+- Bug fixes, quick changes, debugging
+- One-off tasks you will complete in this session
+- Questions or research
+
+---
+
 ### Status Values
 
 - **Done** — Complete, ready to merge or already shipped
