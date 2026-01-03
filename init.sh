@@ -30,19 +30,14 @@ fi
 # Create context directory
 mkdir -p context
 
-# Create context/_index.md
-if [[ ! -f "context/_index.md" ]]; then
-    cat > "context/_index.md" << 'INDEXEOF'
-# Context
-
-Work completed and in progress.
-
-| Doc | Status | Description |
-|-----|--------|-------------|
+# Create context/_index.csv
+if [[ ! -f "context/_index.csv" ]]; then
+    cat > "context/_index.csv" << 'INDEXEOF'
+file,status,description
 INDEXEOF
-    echo -e "${GREEN}✓${NC} Created: context/_index.md"
+    echo -e "${GREEN}✓${NC} Created: context/_index.csv"
 else
-    echo -e "${YELLOW}○${NC} Exists: context/_index.md"
+    echo -e "${YELLOW}○${NC} Exists: context/_index.csv"
 fi
 
 # Create AGENTS.md
@@ -68,7 +63,7 @@ This file is the entry point for AI coding agents working in this repository.
 
 ## Context
 
-All project work (in progress and completed) is tracked in [context/_index.md](context/_index.md).
+All project work (in progress and completed) is tracked in [context/_index.csv](context/_index.csv).
 
 ---
 
@@ -77,7 +72,7 @@ All project work (in progress and completed) is tracked in [context/_index.md](c
 ### Starting a Session
 
 1. **Read this file** — Understand the app (Overview, Architecture)
-2. **Read `context/_index.md`** — See what work exists
+2. **Read `context/_index.csv`** — See what work exists
 3. **Read any "In Progress" docs** — Understand current work
 4. **Start working**
 
@@ -123,10 +118,10 @@ When the user asks you to "save this to context" or when starting substantial wo
 - [Unresolved questions or blockers]
 ```
 
-3. **Add a row to `context/_index.md`:**
+3. **Add a row to `context/_index.csv`:**
 
-```markdown
-| [Name](filename.md) | In Progress | Brief description |
+```csv
+filename.md,In Progress,Brief description
 ```
 
 ---
@@ -175,7 +170,7 @@ You MUST update context docs before finishing:
 When work is done:
 
 1. Update status to **Done** in the doc
-2. Update status to **Done** in `context/_index.md`
+2. Update status to **Done** in `context/_index.csv`
 3. Clean up: remove Progress/Open Questions sections if no longer relevant
 4. Ensure Decisions section captures all important choices
 
