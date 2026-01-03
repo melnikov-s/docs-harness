@@ -146,7 +146,7 @@ Read AGENTS.md, then create context docs for this codebase:
    - App type and key technologies
    - High-level structure
 
-Be concise. These are read at the start of every session.
+Be concise. These are permanent reference docs, so do not add them to _index.csv.
 PROMPTEOF
     echo "────────────────────────────────────────────────────────────────"
     echo ""
