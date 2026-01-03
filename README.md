@@ -4,100 +4,69 @@ Give AI coding agents persistent context across sessions.
 
 ## The Problem
 
-AI agents lose context between sessions. Each new session rediscovers architecture, features, and in-progress work from scratch.
+AI agents lose context between sessions. Every new conversation rediscovers architecture, decisions, and work in progress from scratch.
 
 ## The Solution
 
-A structured documentation harness that agents read and maintain automatically:
+A simple documentation protocol that agents read and maintain:
 
 ```
 your-repo/
-├── AGENTS.md                  # Agent entry point
-└── docs/
-    ├── architecture/          # HOW it's built (stable)
-    ├── features/              # WHAT it does (stable)
-    └── plans/                 # Current work (ephemeral)
+├── AGENTS.md           # Entry point: Overview, Architecture, Protocol
+└── context/
+    └── _index.md       # All work (in progress + completed)
 ```
 
-## Requirements
+## Setup
 
-- bash, awk, mktemp, git
-- curl (for install only)
-
-## Install
+Run in your repository:
 
 ```bash
-# One-liner install
-curl -fsSL https://raw.githubusercontent.com/melnikov-s/docs-harness/main/install.sh | bash
-
-# Manual install (no curl | bash)
-# Download docs-harness.sh and place it on your PATH:
-curl -o ~/.local/bin/docs-harness https://raw.githubusercontent.com/melnikov-s/docs-harness/main/docs-harness.sh
-chmod +x ~/.local/bin/docs-harness
+curl -fsSL https://raw.githubusercontent.com/melnikov-s/docs-harness/main/init.sh | bash
 ```
+
+This creates:
+
+- `AGENTS.md` — Overview, Architecture, and the protocol agents follow
+- `context/_index.md` — Index of all work
+
+Then run the seeding prompt (output by the script) to have your agent fill in the Overview and Architecture sections.
 
 ## Usage
 
-```bash
-docs-harness                      # Scaffold/sync docs
-docs-harness add-plan "X" "Y"     # Add a plan
-docs-harness add-arch "X" "Y"     # Add architecture doc
-docs-harness add-feature "X" "Y"  # Add feature doc
-docs-harness --check              # Validate structure + markers
-docs-harness --print-agents       # Print canonical AGENTS block
-```
-
-## Seeding an Existing Repo
-
-After running `docs-harness`, prompt your agent:
+### Start a session
 
 ```
-Read AGENTS.md, analyze this codebase, and document the architecture
-and key features using docs-harness commands.
+Read AGENTS.md
 ```
 
-The agent will use `add-arch` and `add-feature` to create and populate documentation based on the codebase.
-
-## Continuing Work on a Plan
-
-To have an agent continue an in-progress plan:
+### Create a context doc
 
 ```
-Read AGENTS.md and continue the current in-progress plan.
+Read AGENTS.md and save this to context: [describe what you're working on]
 ```
 
-The agent will find the plan, read the Next Steps, and continue where the last session left off.
+### Continue work
+
+```
+Read AGENTS.md and continue the in-progress work on [feature].
+```
 
 ## How It Works
 
-### Sync Behavior
+AGENTS.md contains:
 
-Running `docs-harness` is safe to repeat:
+- **Overview**: What is this app?
+- **Architecture**: How is it built?
+- **Protocol**: How agents should create, update, and complete context docs
 
-- Creates missing files
-- Updates managed content (between markers)
-- **Preserves** user-added rows in index tables
-- Never deletes content outside markers
+Context docs capture:
 
-### Marker Safety
+- Goals and why they matter
+- Decisions and their rationale
+- Progress and open questions
 
-The tool requires BOTH start and end markers before replacing content:
-
-- If markers are mismatched, it warns and appends a fresh block
-- If you see duplicate harness blocks, remove the orphaned marker block manually and re-run `docs-harness`
-
-### Status Values
-
-Consistent across all files:
-
-- **Done** — Complete, ready to merge or shipped
-- **In Progress** — Currently being worked on
-- **Paused** — Blocked or deprioritized
-- **Planned** — Scoped but not started
-
-## Example
-
-See [`examples/demo-project/`](examples/demo-project/) for a complete example.
+This creates persistent memory across agent sessions.
 
 ## License
 
