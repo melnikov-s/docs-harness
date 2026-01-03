@@ -148,11 +148,14 @@ fi
 
 echo ""
 echo -e "${GREEN}Done!${NC}"
-echo ""
-echo -e "${CYAN}Next:${NC} Run this prompt with your agent:"
-echo ""
-echo "────────────────────────────────────────────────────────────────"
-cat << 'PROMPTEOF'
+
+# Only show seeding prompt if overview.md needs to be filled in
+if grep -qF "[TODO:" "context/overview.md" 2>/dev/null; then
+    echo ""
+    echo -e "${CYAN}Next:${NC} Run this prompt with your agent:"
+    echo ""
+    echo "────────────────────────────────────────────────────────────────"
+    cat << 'PROMPTEOF'
 Read the codebase and fill in context/overview.md and context/architecture.md.
 
 For overview.md (~300 words):
@@ -168,5 +171,6 @@ For architecture.md (~150 words):
 
 Be concise. These files are read by agents at the start of every session.
 PROMPTEOF
-echo "────────────────────────────────────────────────────────────────"
-echo ""
+    echo "────────────────────────────────────────────────────────────────"
+    echo ""
+fi
