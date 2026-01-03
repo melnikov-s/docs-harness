@@ -34,9 +34,10 @@ All work is tracked in [context/_index.csv](context/_index.csv).
 ### Starting a Session
 
 1. Read _index.csv — see what exists
-2. Read overview.md and architecture.md if they exist
-3. Read any In Progress docs
-4. Start working
+2. Read any In Progress docs
+3. If applicable to the task, read overview.md and/or architecture.md
+4. If user requests work on a topic, read relevant context docs
+5. Start working
 
 ### Creating Context Docs
 
