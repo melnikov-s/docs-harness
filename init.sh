@@ -25,19 +25,17 @@ HARNESS_END="</docs-harness>"
 AGENTS_CONTENT='<docs-harness>
 # AGENTS.md
 
-Read [context/overview.md](context/overview.md) and [context/architecture.md](context/architecture.md) first.
-
 ## Context
 
-Work in progress and completed: [context/_index.csv](context/_index.csv)
+All work is tracked in [context/_index.csv](context/_index.csv).
 
 ## Protocol
 
 ### Starting a Session
 
-1. Read overview.md and architecture.md
-2. Read _index.csv — check for In Progress work
-3. Read any In Progress context docs
+1. Read _index.csv — see what exists
+2. Read overview.md and architecture.md if they exist
+3. Read any In Progress docs
 4. Start working
 
 ### Creating Context Docs
@@ -86,6 +84,9 @@ if ! git rev-parse --git-dir > /dev/null 2>&1; then
     echo -e "${YELLOW}Warning: Not in a git repository${NC}"
 fi
 
+# Track if this is a fresh install
+FRESH_INSTALL=false
+
 # Create context directory
 mkdir -p context
 
@@ -93,26 +94,7 @@ mkdir -p context
 if [[ ! -f "context/_index.csv" ]]; then
     echo "file,status,description" > "context/_index.csv"
     echo -e "${GREEN}✓${NC} Created: context/_index.csv"
-fi
-
-# Create context/overview.md (if not exists)
-if [[ ! -f "context/overview.md" ]]; then
-    cat > "context/overview.md" << 'EOF'
-# Overview
-
-[TODO: What is this application? What problem does it solve? Who is it for?]
-EOF
-    echo -e "${GREEN}✓${NC} Created: context/overview.md"
-fi
-
-# Create context/architecture.md (if not exists)
-if [[ ! -f "context/architecture.md" ]]; then
-    cat > "context/architecture.md" << 'EOF'
-# Architecture
-
-[TODO: App type, key technologies, high-level structure]
-EOF
-    echo -e "${GREEN}✓${NC} Created: context/architecture.md"
+    FRESH_INSTALL=true
 fi
 
 # Create or upgrade AGENTS.md
@@ -120,6 +102,7 @@ if [[ ! -f "AGENTS.md" ]]; then
     # New file
     printf '%s\n' "$AGENTS_CONTENT" > "AGENTS.md"
     echo -e "${GREEN}✓${NC} Created: AGENTS.md"
+    FRESH_INSTALL=true
 elif grep -qF "$HARNESS_START" "AGENTS.md"; then
     # Upgrade: replace content between tags
     start_line=$(grep -nF "$HARNESS_START" "AGENTS.md" | head -1 | cut -d: -f1)
@@ -142,34 +125,35 @@ elif grep -qF "$HARNESS_START" "AGENTS.md"; then
 else
     # Old format without tags - backup and replace
     mv "AGENTS.md" "AGENTS.md.backup"
-    echo "$AGENTS_CONTENT" > "AGENTS.md"
+    printf '%s\n' "$AGENTS_CONTENT" > "AGENTS.md"
     echo -e "${YELLOW}⚠${NC} Replaced AGENTS.md (backup: AGENTS.md.backup)"
+    FRESH_INSTALL=true
 fi
 
 echo ""
 echo -e "${GREEN}Done!${NC}"
 
-# Only show seeding prompt if overview.md needs to be filled in
-if grep -qF "[TODO:" "context/overview.md" 2>/dev/null; then
+# Only show seeding prompt on fresh install
+if $FRESH_INSTALL; then
     echo ""
     echo -e "${CYAN}Next:${NC} Run this prompt with your agent:"
     echo ""
     echo "────────────────────────────────────────────────────────────────"
     cat << 'PROMPTEOF'
-Read the codebase and fill in context/overview.md and context/architecture.md.
+Read AGENTS.md, then create context docs for this codebase:
 
-For overview.md (~300 words):
-- What is this application?
-- What problem does it solve?
-- Who is it for?
-- What are its main capabilities?
+1. Create context/overview.md (~300 words):
+   - What is this application?
+   - What problem does it solve?
+   - Who is it for?
 
-For architecture.md (~150 words):
-- App type (web, CLI, library, etc.)
-- Key technologies (frontend, backend, database)
-- High-level directory structure
+2. Create context/architecture.md (~150 words):
+   - App type and key technologies
+   - High-level structure
 
-Be concise. These files are read by agents at the start of every session.
+3. Add both to context/_index.csv with status Done.
+
+Be concise. These are read at the start of every session.
 PROMPTEOF
     echo "────────────────────────────────────────────────────────────────"
     echo ""
