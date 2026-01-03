@@ -5,10 +5,6 @@
 # Usage:
 #   curl -fsSL https://raw.githubusercontent.com/melnikov-s/docs-harness/main/init.sh | bash
 #
-# Creates:
-#   - AGENTS.md (entry point and protocol for AI agents)
-#   - context/_index.md (tracks all work)
-#
 
 set -euo pipefail
 
@@ -22,6 +18,69 @@ else
     GREEN='' YELLOW='' CYAN='' NC=''
 fi
 
+HARNESS_START="<docs-harness>"
+HARNESS_END="</docs-harness>"
+
+# The managed AGENTS.md content
+AGENTS_CONTENT='<docs-harness>
+# AGENTS.md
+
+Read [context/overview.md](context/overview.md) and [context/architecture.md](context/architecture.md) first.
+
+## Context
+
+Work in progress and completed: [context/_index.csv](context/_index.csv)
+
+## Protocol
+
+### Starting a Session
+
+1. Read overview.md and architecture.md
+2. Read _index.csv — check for In Progress work
+3. Read any In Progress context docs
+4. Start working
+
+### Creating Context Docs
+
+For substantial work, create `context/[name].md`:
+
+```
+# Name
+**Status**: In Progress
+
+## Goal
+[What we are accomplishing]
+
+## Decisions
+[Key decisions and WHY - critical for future agents]
+
+## Progress
+### [Date]
+- [What was done]
+```
+
+Add to _index.csv: `filename.md,In Progress,description`
+
+### Before Ending (REQUIRED)
+
+Update context docs with:
+- Progress: what you accomplished
+- Decisions: choices made and rationale
+
+### When Done
+
+Update status to Done in doc and _index.csv.
+
+### When NOT to Create Docs
+
+Bug fixes, small changes, one-off questions.
+
+## Status
+
+- In Progress
+- Done
+</docs-harness>'
+
 # Check if in a git repo
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
     echo -e "${YELLOW}Warning: Not in a git repository${NC}"
@@ -30,202 +89,84 @@ fi
 # Create context directory
 mkdir -p context
 
-# Create context/_index.csv
+# Create context/_index.csv (if not exists)
 if [[ ! -f "context/_index.csv" ]]; then
-    cat > "context/_index.csv" << 'INDEXEOF'
-file,status,description
-INDEXEOF
+    echo "file,status,description" > "context/_index.csv"
     echo -e "${GREEN}✓${NC} Created: context/_index.csv"
-else
-    echo -e "${YELLOW}○${NC} Exists: context/_index.csv"
 fi
 
-# Create AGENTS.md
+# Create context/overview.md (if not exists)
+if [[ ! -f "context/overview.md" ]]; then
+    cat > "context/overview.md" << 'EOF'
+# Overview
+
+[TODO: What is this application? What problem does it solve? Who is it for?]
+EOF
+    echo -e "${GREEN}✓${NC} Created: context/overview.md"
+fi
+
+# Create context/architecture.md (if not exists)
+if [[ ! -f "context/architecture.md" ]]; then
+    cat > "context/architecture.md" << 'EOF'
+# Architecture
+
+[TODO: App type, key technologies, high-level structure]
+EOF
+    echo -e "${GREEN}✓${NC} Created: context/architecture.md"
+fi
+
+# Create or upgrade AGENTS.md
 if [[ ! -f "AGENTS.md" ]]; then
-    cat > "AGENTS.md" << 'AGENTSEOF'
-# AGENTS.md
-
-This file is the entry point for AI coding agents working in this repository.
-
----
-
-## Overview
-
-[TODO: What is this application? What problem does it solve? Who is it for? What are its main capabilities?]
-
----
-
-## Architecture
-
-[TODO: Technical design overview - app type, frontend, backend, data layer, key dependencies, directory structure]
-
----
-
-## Context
-
-All project work (in progress and completed) is tracked in [context/_index.csv](context/_index.csv).
-
----
-
-## Protocol
-
-### Starting a Session
-
-1. **Read this file** — Understand the app (Overview, Architecture)
-2. **Read `context/_index.csv`** — See what work exists
-3. **Read any "In Progress" docs** — Understand current work
-4. **Start working**
-
----
-
-### Creating a Context Doc
-
-When the user asks you to "save this to context" or when starting substantial work:
-
-1. **Create a file in `context/`** named descriptively (e.g., `auth-system.md`, `api-redesign.md`)
-
-2. **Use this format:**
-
-```markdown
-# [Name]
-
-**Status**: In Progress
-
-## Goal
-
-[What are we trying to accomplish?]
-
-## Context
-
-[Background: why this work is needed, what problem it solves]
-
-## Decisions
-
-[Key decisions made and their rationale - this is critical for future agents]
-
-## Approach
-
-[How we're implementing this]
-
-## Progress
-
-### [Date]
-
-- [What was done]
-
-## Open Questions
-
-- [Unresolved questions or blockers]
-```
-
-3. **Add a row to `context/_index.csv`:**
-
-```csv
-filename.md,In Progress,Brief description
-```
-
----
-
-### What to Save in Context Docs
-
-**Always capture:**
-- The goal and why it matters
-- Key decisions and WHY they were made (future agents need rationale)
-- Technical approach and implementation details
-- Any constraints or tradeoffs
-- What was discussed with the user
-- Open questions or blockers
-
-**The context doc should allow a future agent to:**
-- Understand what was decided without re-asking the user
-- Continue the work without losing context
-- Know why certain approaches were chosen or rejected
-
----
-
-### Updating Context During Work
-
-As you work, update the context doc:
-
-- **Progress section**: Add dated entries for significant work
-- **Decisions section**: Add new decisions with rationale
-- **Open Questions**: Note anything unresolved
-
----
-
-### Before Ending Your Session (REQUIRED)
-
-You MUST update context docs before finishing:
-
-1. **Progress**: Add what you accomplished
-2. **Decisions**: Document any decisions made
-3. **Open Questions**: Note anything unresolved
-
-**The context doc is the source of truth.** Do not consider work complete until it reflects what you did and decided.
-
----
-
-### Completing Work
-
-When work is done:
-
-1. Update status to **Done** in the doc
-2. Update status to **Done** in `context/_index.csv`
-3. Clean up: remove Progress/Open Questions sections if no longer relevant
-4. Ensure Decisions section captures all important choices
-
----
-
-### When to Create Context Docs
-
-**Create context docs for:**
-- New features or capabilities
-- Major refactors or redesigns
-- Complex implementations spanning multiple sessions
-- Work where decisions need to be preserved
-
-**Do NOT create context docs for:**
-- Bug fixes
-- Small changes
-- One-off questions
-- Work you'll complete immediately
-
----
-
-## Status Values
-
-- **In Progress** — Currently being worked on
-- **Done** — Complete
-AGENTSEOF
+    # New file
+    printf '%s\n' "$AGENTS_CONTENT" > "AGENTS.md"
     echo -e "${GREEN}✓${NC} Created: AGENTS.md"
+elif grep -qF "$HARNESS_START" "AGENTS.md"; then
+    # Upgrade: replace content between tags
+    start_line=$(grep -nF "$HARNESS_START" "AGENTS.md" | head -1 | cut -d: -f1)
+    end_line=$(grep -nF "$HARNESS_END" "AGENTS.md" | head -1 | cut -d: -f1)
+    
+    if [[ -n "$start_line" && -n "$end_line" ]]; then
+        # Get content before and after
+        if [[ "$start_line" -gt 1 ]]; then
+            head -n $((start_line - 1)) "AGENTS.md" > "AGENTS.md.tmp"
+        else
+            : > "AGENTS.md.tmp"  # Empty file
+        fi
+        printf '%s\n' "$AGENTS_CONTENT" >> "AGENTS.md.tmp"
+        tail -n +$((end_line + 1)) "AGENTS.md" >> "AGENTS.md.tmp"
+        mv "AGENTS.md.tmp" "AGENTS.md"
+        echo -e "${GREEN}↻${NC} Upgraded: AGENTS.md"
+    else
+        echo -e "${YELLOW}⚠${NC} Could not find matching tags, skipping upgrade"
+    fi
 else
-    echo -e "${YELLOW}○${NC} Exists: AGENTS.md"
+    # Old format without tags - backup and replace
+    mv "AGENTS.md" "AGENTS.md.backup"
+    echo "$AGENTS_CONTENT" > "AGENTS.md"
+    echo -e "${YELLOW}⚠${NC} Replaced AGENTS.md (backup: AGENTS.md.backup)"
 fi
 
 echo ""
 echo -e "${GREEN}Done!${NC}"
 echo ""
-echo -e "${CYAN}Next step:${NC} Run this prompt with your AI agent to seed the Overview and Architecture:"
+echo -e "${CYAN}Next:${NC} Run this prompt with your agent:"
 echo ""
 echo "────────────────────────────────────────────────────────────────"
 cat << 'PROMPTEOF'
-Read AGENTS.md and fill in the Overview and Architecture sections based on this codebase.
+Read the codebase and fill in context/overview.md and context/architecture.md.
 
-For **Overview**, describe:
+For overview.md (~300 words):
 - What is this application?
 - What problem does it solve?
 - Who is it for?
 - What are its main capabilities?
 
-For **Architecture**, describe:
-- What type of app is this? (web app, CLI tool, library, mobile app, etc.)
-- Frontend: framework, key libraries, component structure
-- Backend: language, framework, API design, key services
-- Data: database, storage, state management approach
-- Key dependencies and external integrations
-- High-level directory structure and organization
+For architecture.md (~150 words):
+- App type (web, CLI, library, etc.)
+- Key technologies (frontend, backend, database)
+- High-level directory structure
 
-Be concise but comprehensive. Future agents will rely on this for context.
+Be concise. These files are read by agents at the start of every session.
 PROMPTEOF
 echo "────────────────────────────────────────────────────────────────"
 echo ""
