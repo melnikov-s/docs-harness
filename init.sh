@@ -27,15 +27,15 @@ AGENTS_CONTENT='<docs-harness>
 
 ## Context
 
-All work is tracked in [context/_index.csv](context/_index.csv).
+Work in progress: [context/_index.csv](context/_index.csv)
 
 ## Protocol
 
 ### Starting a Session
 
-1. Read _index.csv — see what exists
-2. Read any In Progress docs
-3. If applicable to the task, read overview.md and/or architecture.md
+1. Read _index.csv — see active work
+2. Read docs listed in _index.csv
+3. If applicable, read overview.md and/or architecture.md
 4. If user requests work on a topic, read relevant context docs
 5. Start working
 
@@ -45,7 +45,6 @@ For substantial work, create `context/[name].md`:
 
 ```
 # Name
-**Status**: In Progress
 
 ## Goal
 [What we are accomplishing]
@@ -58,7 +57,7 @@ For substantial work, create `context/[name].md`:
 - [What was done]
 ```
 
-Add to _index.csv: `filename.md,In Progress,description`
+Add to _index.csv: `filename.md,description`
 
 ### Before Ending (REQUIRED)
 
@@ -68,16 +67,11 @@ Update context docs with:
 
 ### When Done
 
-Update status to Done in doc and _index.csv.
+Remove the row from _index.csv. The doc stays in context/ for future reference.
 
 ### When NOT to Create Docs
 
 Bug fixes, small changes, one-off questions.
-
-## Status
-
-- In Progress
-- Done
 </docs-harness>'
 
 # Check if in a git repo
@@ -93,7 +87,7 @@ mkdir -p context
 
 # Create context/_index.csv (if not exists)
 if [[ ! -f "context/_index.csv" ]]; then
-    echo "file,status,description" > "context/_index.csv"
+    echo "file,description" > "context/_index.csv"
     echo -e "${GREEN}✓${NC} Created: context/_index.csv"
     FRESH_INSTALL=true
 fi
@@ -151,8 +145,6 @@ Read AGENTS.md, then create context docs for this codebase:
 2. Create context/architecture.md (~150 words):
    - App type and key technologies
    - High-level structure
-
-3. Add both to context/_index.csv with status Done.
 
 Be concise. These are read at the start of every session.
 PROMPTEOF
