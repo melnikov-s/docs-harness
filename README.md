@@ -8,12 +8,18 @@ Give AI coding agents persistent context across sessions.
 curl -fsSL https://raw.githubusercontent.com/melnikov-s/docs-harness/main/init.sh | bash
 ```
 
+Give this to your agent:
+
+```
+Run: curl -fsSL https://raw.githubusercontent.com/melnikov-s/docs-harness/main/init.sh | bash
+
+Then do as the output instructs.
+```
+
 Creates:
 
 - `AGENTS.md` — Protocol for agents
 - `context/_index.csv` — Work index
-
-Then run the seeding prompt (output by the script) to have your agent create overview and architecture docs.
 
 ## Usage
 
